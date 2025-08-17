@@ -14,11 +14,11 @@ jobs:
       - name: Setear la carpeta de destino
         run: |
           if [ "${GITHUB_REF_NAME}" = "main" ]; then
-            echo "TARGET_DIR=/www/wwwroot/planesqa.com" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
-            echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
             echo "TARGET_DIR=/www/wwwroot/minuevositio.com" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
+            echo "TARGET_DIR=/www/wwwroot/planesqa.com" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
           fi
 
       - name: Clonar repo en carpeta temporal
