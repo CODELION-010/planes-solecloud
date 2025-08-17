@@ -27,13 +27,16 @@ jobs:
           ref: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Limpiar carpeta web de destino
+      - name: Sincronizar archivos con rsync
         run: |
-          rm -rf $TARGET_DIR/*
+          # Como el .gitignore ya filtra los archivos innecesarios,
+          # solo excluimos el directorio .git que siempre viene
+          rsync -av \
+            --exclude='.git/' \
+            ./ $TARGET_DIR/
 
-      - name: Copiar archivos a carpeta web
+      - name: Verificar deploy
         run: |
-          cp -r /tmp/deploy-temp/* $TARGET_DIR/
-
-      - name: Limpiar carpeta temporal
-        run: rm -rf /tmp/deploy-temp
+          echo "Deploy completado para la rama: ${{ github.ref_name }}"
+          echo "Directorio: $TARGET_DIR"
+          ls -la $TARGET_DIR
