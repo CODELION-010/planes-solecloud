@@ -1,0 +1,39 @@
+name: Deploy estático a aaPanel
+
+on:
+  push:
+    branches:
+      - main
+      - qa
+      - dev
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Setear la carpeta de destino
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "TARGET_DIR=/www/wwwroot/planesqa.com" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
+            echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "TARGET_DIR=/www/wwwroot/minuevositio.com" >> $GITHUB_ENV
+          fi
+
+      - name: Clonar repo en carpeta temporal
+        run: |
+          if [ -d /tmp/deploy-temp ]; then rm -rf /tmp/deploy-temp; fi
+          git clone git@github.com:CODELION-010/planes-solecloud.git /tmp/deploy-temp \
+            --branch ${{ github.ref_name }}
+
+      - name: Limpiar carpeta web de destino
+        run: |
+          rm -rf $TARGET_DIR/*
+
+      - name: Copiar archivos a carpeta web
+        run: |
+          cp -r /tmp/deploy-temp/* $TARGET_DIR/
+
+      - name: Limpiar carpeta temporal
+        run: rm -rf /tmp/deploy-temp
