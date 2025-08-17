@@ -21,11 +21,11 @@ jobs:
             echo "TARGET_DIR=/www/wwwroot/minuevositio.com" >> $GITHUB_ENV
           fi
 
-      - name: Clonar repo en carpeta temporal
-        run: |
-          if [ -d /tmp/deploy-temp ]; then rm -rf /tmp/deploy-temp; fi
-          git clone git@github.com:CODELION-010/planes-solecloud.git /tmp/deploy-temp \
-            --branch ${{ github.ref_name }}
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Limpiar carpeta web de destino
         run: |
