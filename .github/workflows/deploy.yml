@@ -1,36 +1,28 @@
-name: Deploy a aaPanel
+name: Deploy a aapanel
 
 on:
   push:
     branches:
-      - main
-      - qa
       - dev
+      - qa
+      - main
 
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Setear la carpeta de destino
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy code
         run: |
-          if [ "${GITHUB_REF_NAME}" = "main" ]; then
-            echo "TARGET_DIR=/www/wwwroot/minuevositio.com" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
-            echo "TARGET_DIR=/www/wwwroot/planesqa.com" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
-            echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
+          if [ "${GITHUB_REF##*/}" == "dev" ]; then
+            TARGET="/www/wwwroot/planes-dev.com"
+          elif [ "${GITHUB_REF##*/}" == "qa" ]; then
+            TARGET="/www/wwwroot/planes-qa.com"
+          else
+            TARGET="/www/wwwroot/minuevositio.com"
           fi
 
-      - name: Checkout código
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Limpiar carpeta web de destino
-        run: |
-          sudo rm -rf $TARGET_DIR/*
-
-      - name: Copiar archivos a carpeta web
-        run: |
-          sudo cp -r $GITHUB_WORKSPACE/. $TARGET_DIR/
+          # Copiar archivos al directorio correspondiente
+          rsync -av --delete ./ $TARGET
