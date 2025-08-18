@@ -1,4 +1,4 @@
-name: Deploy estático a aaPanel
+name: Deploy a aaPanel
 
 on:
   push:
@@ -27,16 +27,10 @@ jobs:
           ref: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sincronizar archivos con rsync
+      - name: Limpiar carpeta web de destino
         run: |
-          # Como el .gitignore ya filtra los archivos innecesarios,
-          # solo excluimos el directorio .git que siempre viene
-          rsync -av \
-            --exclude='.git/' \
-            ./ $TARGET_DIR/
+          sudo rm -rf $TARGET_DIR/*
 
-      - name: Verificar deploy
+      - name: Copiar archivos a carpeta web
         run: |
-          echo "Deploy completado para la rama: ${{ github.ref_name }}"
-          echo "Directorio: $TARGET_DIR"
-          ls -la $TARGET_DIR
+          sudo cp -r $GITHUB_WORKSPACE/. $TARGET_DIR/
