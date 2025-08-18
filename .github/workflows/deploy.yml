@@ -1,4 +1,4 @@
-name: Deploy estático a aaPanel
+name: Deploy a aaPanel
 
 on:
   push:
@@ -29,11 +29,8 @@ jobs:
 
       - name: Limpiar carpeta web de destino
         run: |
-          rm -rf $TARGET_DIR/*
+          sudo rm -rf $TARGET_DIR/*
 
       - name: Copiar archivos a carpeta web
         run: |
-          cp -r /tmp/deploy-temp/* $TARGET_DIR/
-
-      - name: Limpiar carpeta temporal
-        run: rm -rf /tmp/deploy-temp
+          sudo cp -r $GITHUB_WORKSPACE/. $TARGET_DIR/
