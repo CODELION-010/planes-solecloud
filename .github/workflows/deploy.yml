@@ -1,5 +1,5 @@
 #coment
-name: Deploy a aapanel
+name: Deploy a aapanel with sync
 
 on:
   push:
