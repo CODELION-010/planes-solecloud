@@ -1,4 +1,4 @@
-name: Deploy a aapanel
+name: Deploy a aapanel.
 
 on:
   push:
