@@ -29,7 +29,8 @@ jobs:
 
       - name: Deploy con rsync
         run: |
-          rsync -av --delete \
+          rsync -av --delete --no-group --ignore-errors \
             --exclude='.git' \
             --exclude='.github' \
+            --exclude='.user.ini' \
             ./ $TARGET_DIR/
