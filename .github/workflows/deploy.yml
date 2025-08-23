@@ -27,10 +27,10 @@ jobs:
             echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
           fi
 
-      - name: Limpiar carpeta web de destino
+      - name: Deploy con rsync
         run: |
-          rm -rf $TARGET_DIR/*
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            ./ $TARGET_DIR/
 
-      - name: Copiar archivos a carpeta web
-        run: |
-          cp -r ./* $TARGET_DIR/
