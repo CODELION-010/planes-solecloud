@@ -27,10 +27,9 @@ jobs:
             echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
           fi
 
-      - name: Deploy con rsync
+      - name: Deploy con rsync (sin tocar permisos)
         run: |
-          rsync -av --delete --delete-excluded \
-            --no-perms --no-owner --no-group --no-times \
+          rsync -rlv --delete --delete-excluded \
             --exclude='.git' \
             --exclude='.github' \
             --exclude='.user.ini' \
