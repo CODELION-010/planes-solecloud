@@ -1,39 +1,13 @@
-name: Deploy a aapanel
+jobs:
+name: Deploy Docker
 
 on:
   push:
     branches:
-      - dev
-      - qa
       - main
+      - qa
+      - dev
 
-jobs:
-  deploy:
-    runs-on: self-hosted
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.ref_name }}
-
-      - name: Setear la carpeta de destino
-        run: |
-          if [ "${GITHUB_REF_NAME}" = "main" ]; then
-            echo "TARGET_DIR=/www/wwwroot/minuevositio.com" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
-            echo "TARGET_DIR=/www/wwwroot/planesqa.com" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
-            echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
-          fi
-
-      - name: Deploy con rsync (sin tocar permisos)
-        run: |
-          rsync -rlv --delete --delete-excluded \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.user.ini' \
-            ./ $TARGET_DIR/
 
   docker-deploy:
     runs-on: self-hosted
@@ -62,3 +36,4 @@ jobs:
           export PORT=${PORT}
           docker-compose down || true
           docker-compose up -d --build
+    runs-on: self-hosted
