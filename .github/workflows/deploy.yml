@@ -33,4 +33,3 @@ jobs:
             --exclude='.git' \
             --exclude='.github' \
             ./ $TARGET_DIR/
-
