@@ -29,8 +29,8 @@ jobs:
 
       - name: Deploy con rsync
         run: |
-          rsync -av --delete \
-            --no-perms --no-owner --no-group \
+          rsync -av --delete --delete-excluded \
+            --no-perms --no-owner --no-group --no-times \
             --exclude='.git' \
             --exclude='.github' \
             --exclude='.user.ini' \
