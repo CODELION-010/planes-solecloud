@@ -1,5 +1,4 @@
-#coment
-name: Deploy a aapanel with sync
+name: Deploy a aapanel
 
 on:
   push:
@@ -12,18 +11,25 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
 
-      - name: Deploy code
+      - name: Setear la carpeta de destino
         run: |
-          if [ "${GITHUB_REF##*/}" == "dev" ]; then
-            TARGET="/www/wwwroot/planes-dev.com"
-          elif [ "${GITHUB_REF##*/}" == "qa" ]; then
-            TARGET="/www/wwwroot/planes-qa.com"
-          else
-            TARGET="/www/wwwroot/minuevositio.com"
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "TARGET_DIR=/www/wwwroot/minuevositio.com" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
+            echo "TARGET_DIR=/www/wwwroot/planesqa.com" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "TARGET_DIR=/www/wwwroot/planesdev.com" >> $GITHUB_ENV
           fi
 
-          # Copiar archivos al directorio correspondiente
-          rsync -av --delete ./ $TARGET
+      - name: Deploy con rsync
+        run: |
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            ./ $TARGET_DIR/
