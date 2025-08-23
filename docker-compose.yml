@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "${PORT}:80"
+    restart: always
+    container_name: planes-solecloud
+    environment:
+      - NGINX_PORT=${PORT}

@@ -34,3 +34,31 @@ jobs:
             --exclude='.github' \
             --exclude='.user.ini' \
             ./ $TARGET_DIR/
+
+  docker-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+
+      - name: Setear puerto
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "PORT=7300" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
+            echo "PORT=7301" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "PORT=7302" >> $GITHUB_ENV
+          fi
+
+      - name: Build imagen Docker
+        run: docker build -t planes-solecloud:${GITHUB_REF_NAME} .
+
+      - name: Deploy con Docker Compose
+        run: |
+          export PORT=${PORT}
+          docker-compose down || true
+          docker-compose up -d --build
