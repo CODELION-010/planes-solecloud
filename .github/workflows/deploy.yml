@@ -19,7 +19,6 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       # 2. Detener y eliminar contenedor existente
       - name: 🛑 Detener y eliminar contenedor anterior
