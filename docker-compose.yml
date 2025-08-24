@@ -1,10 +1,10 @@
-version: '3.8'
+version: "3.8"
 services:
-  planes-solecloud:
+  web:
     build: .
     ports:
       - "${PORT}:80"
     restart: always
-    container_name: planes-solecloud
+    container_name: ${CONTAINER_NAME}
     environment:
-      - "${PORT}:80"
+      - PORT=${PORT}
