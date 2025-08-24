@@ -31,7 +31,7 @@ jobs:
       # 3. Reconstruir y levantar contenedor
       - name: 🔨 Reconstruir y levantar contenedor
         run: |
-          docker-compose up -d --build planes-solecloud
+          sudo docker-compose up -d --build planes-solecloud
 
       # 4. Mensaje final
       - name: ✅ Mensaje de confirmación
