@@ -1,4 +1,4 @@
-name: Deploy Docker
+name: Deploy planes-solecloud
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
       - qa
       - dev
 
-
-  docker-deploy:
-    runs-on: ubuntu-latest
+jobs:
+  deploy:
+    runs-on: self-hosted 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setear puerto
+      - name: Configurar puerto según la rama
         run: |
           if [ "${GITHUB_REF_NAME}" = "main" ]; then
             echo "PORT=7300" >> $GITHUB_ENV
@@ -24,13 +24,15 @@ on:
             echo "PORT=7302" >> $GITHUB_ENV
           fi
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Detener y eliminar contenedor
+        run: |
+          docker-compose stop planes-solecloud || true
+          docker-compose rm -f planes-solecloud || true
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          tags: planes-solecloud:${{ github.ref_name }}
-          load: true
-           PORT=${{ env.PORT }}
+      - name: Reconstruir y levantar contenedor
+        run: |
+          docker-compose up -d --build planes-solecloud
+
+      - name: Verificar despliegue
+        run: |
+          echo "✅ Desplegado en puerto $PORT"
