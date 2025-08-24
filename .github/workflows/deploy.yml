@@ -25,7 +25,7 @@ jobs:
       # 2. Detener y eliminar contenedor existente
       - name: 🛑 Detener y eliminar contenedor anterior
         run: |
-         sdocker-compose stop planes-solecloud
+         docker-compose stop planes-solecloud
          docker-compose rm -f planes-solecloud
 
       # 3. Reconstruir y levantar contenedor
