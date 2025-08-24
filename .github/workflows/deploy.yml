@@ -23,10 +23,10 @@ jobs:
           ref: ${{ github.ref_name }}
 
       # 2. Detener y eliminar contenedor existente
-      - name: 🛑 Detener y eliminar contenedor anterior
+      - name: Detener y eliminar contenedor
         run: |
-          docker-compose stop web
-          docker-compose rm -f web
+          docker-compose stop web || true
+          docker-compose rm -f web || true
 
       # 3. Reconstruir y levantar contenedor
       - name: 🔨 Reconstruir y levantar contenedor
