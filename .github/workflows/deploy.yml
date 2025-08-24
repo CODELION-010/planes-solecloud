@@ -1,38 +1,40 @@
-name: Deploy planes-solecloud
+name: 🚀 Deploy planes-solecloud
 
 on:
   push:
     branches:
       - main
-      - qa
       - dev
+      - qa
 
 jobs:
   deploy:
-    runs-on: self-hosted 
+    runs-on: self-hosted   # 👈 tu runner en el servidor
+
     steps:
-      - name: Checkout repo
+      # 1. Clonar el repositorio
+      - name: 📥 Clonar repositorio
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
 
-      - name: Configurar puerto según la rama
+      # 2. Detener y eliminar contenedor existente
+      - name: 🛑 Detener y eliminar contenedor anterior
         run: |
-          if [ "${GITHUB_REF_NAME}" = "main" ]; then
-            echo "PORT=7300" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
-            echo "PORT=7301" >> $GITHUB_ENV
-          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
-            echo "PORT=7302" >> $GITHUB_ENV
-          fi
+          docker compose stop planes-solecloud || true
+          docker compose rm -f planes-solecloud || true
 
-      - name: Detener y eliminar contenedor
+      # 3. Reconstruir y levantar contenedor
+      - name: 🔨 Reconstruir y levantar contenedor
         run: |
-          docker-compose stop planes-solecloud
-          docker-compose rm -f planes-solecloud
+          docker compose up -d --build planes-solecloud
 
-      - name: Reconstruir y levantar contenedor
-        run: |
-          docker-compose up -d --build planes-solecloud
+      # 4. Mensaje final
+      - name: ✅ Mensaje de confirmación
+        if: success()
+        run: echo "🚀 Deploy completado con éxito en ${{ github.ref_name }}"
 
-      - name: Verificar despliegue
-        run: |
-          echo "✅ Desplegado en puerto $PORT"
+      - name: ❌ Mensaje de error
+        if: failure()
+        run: echo "❌ Falló el deploy en ${{ github.ref_name }}"
