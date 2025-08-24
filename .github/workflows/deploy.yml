@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted   # 👈 tu runner en el servidor
+    runs-on: self-hosted
 
     steps:
       # 1. Clonar el repositorio
@@ -22,13 +22,13 @@ jobs:
       # 2. Detener y eliminar contenedor existente
       - name: 🛑 Detener y eliminar contenedor anterior
         run: |
-          docker compose stop planes-solecloud || true
-          docker compose rm -f planes-solecloud || true
+          sudo docker-compose stop planes-solecloud || true
+          sudo docker-compose rm -f planes-solecloud || true
 
       # 3. Reconstruir y levantar contenedor
       - name: 🔨 Reconstruir y levantar contenedor
         run: |
-          docker compose up -d --build planes-solecloud
+          sudo docker-compose up -d --build planes-solecloud
 
       # 4. Mensaje final
       - name: ✅ Mensaje de confirmación
