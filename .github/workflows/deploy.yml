@@ -11,6 +11,9 @@ jobs:
   deploy:
     runs-on: self-hosted
 
+    env:
+      PORT: ${{ github.ref_name == 'main' && '7300' || github.ref_name == 'qa' && '7301' || github.ref_name == 'dev' && '7302' }}
+
     steps:
       # 1. Clonar el repositorio
       - name: 📥 Clonar repositorio
@@ -33,7 +36,7 @@ jobs:
       # 4. Mensaje final
       - name: ✅ Mensaje de confirmación
         if: success()
-        run: echo "🚀 Deploy completado con éxito en ${{ github.ref_name }}"
+        run: echo "🚀 Deploy completado con éxito en ${{ github.ref_name }} (puerto $PORT)"
 
       - name: ❌ Mensaje de error
         if: failure()
