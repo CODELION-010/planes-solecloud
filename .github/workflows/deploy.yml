@@ -26,8 +26,8 @@ jobs:
 
       - name: Detener y eliminar contenedor
         run: |
-          docker-compose stop planes-solecloud || true
-          docker-compose rm -f planes-solecloud || true
+          docker-compose stop planes-solecloud
+          docker-compose rm -f planes-solecloud
 
       - name: Reconstruir y levantar contenedor
         run: |
