@@ -11,8 +11,6 @@ jobs:
   deploy:
     runs-on: self-hosted
 
-    env:
-      PORT: ${{ github.ref_name == 'main' && '7300' || github.ref_name == 'qa' && '7301' || github.ref_name == 'dev' && '7302' }}
 
     steps:
       # 1. Clonar el repositorio.

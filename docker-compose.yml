@@ -1,10 +1,8 @@
-version: '3.8'
 services:
+  # Servicio para producción (main)
   planes-solecloud:
     build: .
-    ports:
-      - "${PORT}:80"
-    restart: always
     container_name: planes-solecloud
-    environment:
-      - "${PORT}:80"
+    ports:
+      - "7300:80"
+    restart: unless-stopped
