@@ -33,4 +33,4 @@ on:
           context: .
           tags: planes-solecloud:${{ github.ref_name }}
           load: true
-          export PORT=${PORT}
+           PORT=${{ env.PORT }}
