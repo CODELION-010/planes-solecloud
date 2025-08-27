@@ -20,6 +20,7 @@ jobs:
           echo "📦 Desplegando contenedor para la rama: ${{ github.ref_name }}"
 
           if [ "${{ github.ref_name }}" == "main" ]; then
+
             docker-compose stop web-prod
             docker-compose rm -f web-prod
             docker-compose build web-prod
@@ -35,3 +36,4 @@ jobs:
             docker-compose build web-dev
             docker-compose up -d web-dev
           fi
+
