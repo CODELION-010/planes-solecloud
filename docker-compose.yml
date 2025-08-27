@@ -1,23 +1,38 @@
 version: "3.8"
 
 services:
-  web-prod:
-    build: .
-    container_name: web-prod
-    ports:
-      - "7300:80"
-    restart: unless-stopped
-
-  web-qa:
-    build: .
-    container_name: web-qa
-    ports:
-      - "7301:80"
-    restart: unless-stopped
-
   web-dev:
-    build: .
-    container_name: web-dev
+    container_name: app_dev
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "7302:80"
-    restart: unless-stopped
+    volumes:
+      - .:/app
+    environment:
+      - ENV=development
+
+  web-qa:
+    container_name: app_qa
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7301:80"
+    volumes:
+      - .:/app
+    environment:
+      - ENV=qa
+
+  web-prod:
+    container_name: app_prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7300:80"
+    volumes:
+      - .:/app
+    environment:
+      - ENV=production

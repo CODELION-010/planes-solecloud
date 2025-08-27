@@ -1,4 +1,4 @@
-name: Deploy containers
+name: Deploy App with Docker Compose
 
 on:
   push:
@@ -6,18 +6,26 @@ on:
       - main
       - qa
       - dev
+  pull_request:
+    branches:
+      - main
+      - qa
+      - dev
 
 jobs:
   deploy:
-    runs-on: self-hosted   # 👈 importante, usas tu propio runner
-
+    runs-on: self-hosted   # 👈 recuerda, tu usas un runner local
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Levantar servicio por rama
+      - name: Build & Deploy with docker-compose
         run: |
-          echo "📦 Desplegando contenedor para la rama: ${{ github.ref_name }}"
+          echo "📦 Desplegando para rama: ${{ github.ref_name }}"
+
+          # limpiar contenedores huérfanos antes de levantar
+          docker-compose down --remove-orphans || true
+
 
           if [ "${{ github.ref_name }}" == "main" ]; then
 
@@ -36,4 +44,5 @@ jobs:
             docker-compose build web-dev
             docker-compose up -d web-dev
           fi
+
 
