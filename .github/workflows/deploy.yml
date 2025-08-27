@@ -1,12 +1,6 @@
-name: Deploy App with Docker Compose
-
+name: self-hosted Runner
 on:
   push:
-    branches:
-      - main
-      - qa
-      - dev
-  pull_request:
     branches:
       - main
       - qa
@@ -14,35 +8,38 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted   # 👈 recuerda, tu usas un runner local
+    runs-on: self-hosted
     steps:
-      - name: Checkout repo
+      - name: Clonar repositorio
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & Deploy with docker-compose
+      - name: Setear nombre del servicio
         run: |
-          echo "📦 Desplegando para rama: ${{ github.ref_name }}"
-
-          # limpiar contenedores huérfanos antes de levantar
-          docker-compose down --remove-orphans || true
-
-
-          if [ "${{ github.ref_name }}" = "main" ]; then
-
-            docker-compose stop web-prod || true
-            docker-compose rm -f web-prod || true
-            docker-compose build web-prod 
-            docker-compose up -d web-prod 
-          elif [ "${{ github.ref_name }}" = "qa" ]; then
-            docker-compose stop web-qa || true
-            docker-compose rm -f web-qa || true
-            docker-compose build web-qa
-            docker-compose up -d web-qa
-          elif [ "${{ github.ref_name }}" = "dev" ]; then
-            docker-compose stop web-dev || true
-            docker-compose rm -f web-dev || true
-            docker-compose build web-dev
-            docker-compose up -d web-dev
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "SERVICE_NAME=web-prod" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
+            echo "SERVICE_NAME=web-qa" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "SERVICE_NAME=web-dev" >> $GITHUB_ENV
           fi
 
+      - name: Detener y eliminar contenedor
+        run: |
+          docker-compose stop $SERVICE_NAME || true
+          docker-compose rm -f $SERVICE_NAME || true
 
+      - name: Reconstruir y levantar contenedor
+        run: |
+          docker-compose up -d --build $SERVICE_NAME
+
+      - name: Verificar despliegue
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "🚀 Deploy completado con éxito"
+          else
+            echo "❌ Falló el deploy"
+            exit 1
+          fi
