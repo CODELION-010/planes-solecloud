@@ -30,7 +30,7 @@ jobs:
       # 3. Reconstruir y levantar contenedor
       - name: 🔨 Reconstruir y levantar contenedor
         run: |
-          PORT=$PORT CONTAINER_NAME=$CONTAINER_NAME docker-compose up -d --build
+          PORT=$PORT CONTAINER_NAME=$CONTAINER_NAME docker compose -p $CONTAINER_NAME up -d --build
 
       # 4. Mensaje final
       - name: ✅ Mensaje de confirmación
