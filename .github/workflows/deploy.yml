@@ -1,48 +1,23 @@
-name: Deploy App with Docker Compose
+version: "3.8"
 
-on:
-  push:
-    branches:
-      - main
-      - qa
-      - dev
-  pull_request:
-    branches:
-      - main
-      - qa
-      - dev
+services:
+  web-prod:
+    build: .
+    container_name: web-prod
+    ports:
+      - "7300:80"
+    restart: unless-stopped
 
-jobs:
-  deploy:
-    runs-on: self-hosted   # 👈 recuerda, tu usas un runner local
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+  web-qa:
+    build: .
+    container_name: web-qa
+    ports:
+      - "7301:80"
+    restart: unless-stopped
 
-      - name: Build & Deploy with docker-compose
-        run: |
-          echo "📦 Desplegando para rama: ${{ github.ref_name }}"
-
-          # limpiar contenedores huérfanos antes de levantar
-          docker-compose down --remove-orphans || true
-
-
-          if [ "${{ github.ref_name }}" == "main" ]; then
-
-            docker-compose stop web-prod
-            docker-compose rm -f web-prod
-            docker-compose build web-prod
-            docker-compose up -d web-prod
-          elif [ "${{ github.ref_name }}" == "qa" ]; then
-            docker-compose stop web-qa
-            docker-compose rm -f web-qa
-            docker-compose build web-qa
-            docker-compose up -d web-qa
-          elif [ "${{ github.ref_name }}" == "dev" ]; then
-            docker-compose stop web-dev
-            docker-compose rm -f web-dev
-            docker-compose build web-dev
-            docker-compose up -d web-dev
-          fi
-
-
+  web-dev:
+    build: .
+    container_name: web-dev
+    ports:
+      - "7302:80"
+    restart: unless-stopped
