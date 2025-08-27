@@ -24,6 +24,7 @@ jobs:
             echo "SERVICE_NAME=web-qa" >> $GITHUB_ENV
           elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
             echo "SERVICE_NAME=web-dev" >> $GITHUB_ENV
+
           fi
       
       - name: Detener y eliminar contenedor
@@ -88,6 +89,7 @@ jobs:
             echo "✅ No se encontraron errores críticos en los logs recientes"
 
           fi
+
 
 
 
