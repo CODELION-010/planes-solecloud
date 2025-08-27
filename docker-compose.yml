@@ -12,7 +12,7 @@ services:
     build: .
     container_name: web-qa
     ports:
-      - "7301:80"
+      - "7302:80"
     restart: unless-stopped
 
   # Servicio para desarrollo
@@ -20,4 +20,4 @@ services:
     build: .
     container_name: web-dev
     ports:
-      - "7302:80"
+      - "7301:80"
