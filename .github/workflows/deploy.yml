@@ -17,12 +17,12 @@ jobs:
       - name: Reconstruir y actualizar contenedor según la rama
         run: |
           if [ "${GITHUB_REF_NAME}" == "main" ]; then
-            docker compose build web-prod
-            docker compose up -d web-prod
+            docker-compose build web-prod
+            docker-compose up -d web-prod
           elif [ "${GITHUB_REF_NAME}" == "qa" ]; then
-            docker compose build web-qa
-            docker compose up -d web-qa
+            docker-compose build web-qa
+            docker-compose up -d web-qa
           elif [ "${GITHUB_REF_NAME}" == "dev" ]; then
-            docker compose build web-dev
-            docker compose up -d web-dev
+            docker-compose build web-dev
+            docker-compose up -d web-dev
           fi
