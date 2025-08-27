@@ -1,42 +1,40 @@
-name: 🚀 Deploy planes-solecloud
+name: Deploy
 
 on:
   push:
     branches:
       - main
-      - dev
       - qa
+      - dev
 
 jobs:
   deploy:
-    runs-on: self-hosted
-    env:
-      PORT: ${{ github.ref_name == 'main' && '7300' || github.ref_name == 'qa' && '7301' || github.ref_name == 'dev' && '7302' }}
-      CONTAINER_NAME: ${{ github.ref_name == 'main' && 'planes-solecloud-prod' || github.ref_name == 'qa' && 'planes-solecloud-qa' || github.ref_name == 'dev' && 'planes-solecloud-dev' }}
+    runs-on: ubuntu-latest
+
     steps:
-      # 1. Clonar el repositorio.
-      - name: 📥 Clonar repositorio
-        uses: actions/checkout@v4
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Conectar al servidor
+        uses: appleboy/ssh-action@v0.1.8
         with:
-          fetch-depth: 0
-          ref: ${{ github.ref_name }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /ruta/tu/proyecto
 
-      # 2. Detener y eliminar contenedor existente
-      - name: 🛑 Detener y eliminar contenedor anterior
-        run: |
-          docker stop ${CONTAINER_NAME} || true
-          docker rm -f ${CONTAINER_NAME} || true
+            # Traer últimos cambios
+            git pull origin ${{ github.ref_name }}
 
-      # 3. Reconstruir y levantar contenedor
-      - name: 🔨 Reconstruir y levantar contenedor
-        run: |
-          PORT=$PORT CONTAINER_NAME=$CONTAINER_NAME docker compose -p $CONTAINER_NAME up -d --build
-
-      # 4. Mensaje final
-      - name: ✅ Mensaje de confirmación
-        if: success()
-        run: echo "🚀 Deploy completado con éxito en ${{ github.ref_name }} (puerto $PORT)"
-
-      - name: ❌ Mensaje de error
-        if: failure()
-        run: echo "❌ Falló el deploy en ${{ github.ref_name }}"
+            # Construir según la rama
+            if [ "${{ github.ref_name }}" == "main" ]; then
+              docker compose build web-prod
+              docker compose up -d web-prod
+            elif [ "${{ github.ref_name }}" == "qa" ]; then
+              docker compose build web-qa
+              docker compose up -d web-qa
+            elif [ "${{ github.ref_name }}" == "dev" ]; then
+              docker compose build web-dev
+              docker compose up -d web-dev
+            fi
