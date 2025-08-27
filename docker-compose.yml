@@ -1,6 +1,5 @@
-version: "3.8"
-
 services:
+  # Servicio para producción (main)
   web-prod:
     build: .
     container_name: web-prod
@@ -8,16 +7,17 @@ services:
       - "7300:80"
     restart: unless-stopped
 
+  # Servicio para QA
   web-qa:
     build: .
     container_name: web-qa
     ports:
-      - "7301:80"
+      - "7302:80"
     restart: unless-stopped
 
+  # Servicio para desarrollo
   web-dev:
     build: .
     container_name: web-dev
     ports:
-      - "7302:80"
-    restart: unless-stopped
+      - "7301:80"
