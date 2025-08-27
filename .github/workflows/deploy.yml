@@ -1,4 +1,4 @@
-name: Deploy App with Docker Compose
+name: Deploy App
 
 on:
   push:
@@ -6,41 +6,31 @@ on:
       - main
       - qa
       - dev
-  pull_request:
-    branches:
-      - main
-      - qa
-      - dev
 
 jobs:
-  deploy:
-    runs-on: self-hosted   # 👈 recuerda, tu usas un runner local
+  deploy-prod:
+    if: github.ref_name == 'main'
+    runs-on: self-hosted
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+      - run: |
+          docker-compose build web-prod
+          docker-compose up -d web-prod
 
-      - name: Build & Deploy with docker-compose
-        run: |
-          echo "📦 Desplegando para rama: ${{ github.ref_name }}"
+  deploy-qa:
+    if: github.ref_name == 'qa'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          docker-compose build web-qa
+          docker-compose up -d web-qa
 
-          # limpiar contenedores huérfanos antes de levantar
-          docker-compose down --remove-orphans || true
-
-
-          if [ "${{ github.ref_name }}" = "main" ]; then
-
-            docker-compose stop web-prod || true
-            docker-compose rm -f web-prod || true
-            docker-compose build web-prod 
-            docker-compose up -d web-prod 
-          elif [ "${{ github.ref_name }}" = "qa" ]; then
-            docker-compose stop web-qa || true
-            docker-compose rm -f web-qa || true
-            docker-compose build web-qa
-            docker-compose up -d web-qa
-          elif [ "${{ github.ref_name }}" = "dev" ]; then
-            docker-compose stop web-dev || true
-            docker-compose rm -f web-dev || true
-            docker-compose build web-dev
-            docker-compose up -d web-dev
-          fi
+  deploy-dev:
+    if: github.ref_name == 'dev'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          docker-compose build web-dev
+          docker-compose up -d web-dev
