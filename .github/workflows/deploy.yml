@@ -26,6 +26,8 @@ jobs:
             docker-compose build web-qa
             docker-compose up -d web-qa
           elif [ "${{ github.ref_name }}" == "dev" ]; then
+            docker-compose stop web-dev
+            docker-compose rm -f web-dev
             docker-compose build web-dev
             docker-compose up -d web-dev
           fi
