@@ -1,42 +1,31 @@
-name: 🚀 Deploy planes-solecloud
+name: Deploy containers
 
 on:
   push:
     branches:
       - main
-      - dev
       - qa
+      - dev
 
 jobs:
   deploy:
-    runs-on: self-hosted
-    env:
-      PORT: ${{ github.ref_name == 'main' && '7300' || github.ref_name == 'qa' && '7301' || github.ref_name == 'dev' && '7302' }}
+    runs-on: self-hosted   # 👈 importante, usas tu propio runner
 
     steps:
-      # 1. Clonar el repositorio.
-      - name: 📥 Clonar repositorio
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.ref_name }}
+      - name: Checkout código
+        uses: actions/checkout@v3
 
-      # 2. Detener y eliminar contenedor existente
-      - name: 🛑 Detener y eliminar contenedor anterior
+      - name: Levantar servicio por rama
         run: |
-          docker-compose stop planes-solecloud || true
-          docker-compose rm -f planes-solecloud || true
+          echo "📦 Desplegando contenedor para la rama: ${{ github.ref_name }}"
 
-      # 3. Reconstruir y levantar contenedor
-      - name: 🔨 Reconstruir y levantar contenedor
-        run: |
-          docker-compose up -d --build planes-solecloud
-
-      # 4. Mensaje final
-      - name: ✅ Mensaje de confirmación
-        if: success()
-        run: echo "🚀 Deploy completado con éxito en ${{ github.ref_name }} (puerto $PORT)"
-
-      - name: ❌ Mensaje de error
-        if: failure()
-        run: echo "❌ Falló el deploy en ${{ github.ref_name }}"
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            docker-compose build web-prod
+            docker-compose up -d web-prod
+          elif [ "${{ github.ref_name }}" == "qa" ]; then
+            docker-compose build web-qa
+            docker-compose up -d web-qa
+          elif [ "${{ github.ref_name }}" == "dev" ]; then
+            docker-compose build web-dev
+            docker-compose up -d web-dev
+          fi
