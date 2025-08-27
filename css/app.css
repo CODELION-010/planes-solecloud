@@ -7,7 +7,7 @@ html {
 }
 body {
     font-family: 'Raleway', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     line-height: 2;
 }
 
@@ -45,6 +45,7 @@ h3 {
 a {
     text-decoration: none;
     color: #000;
+    font-weight: 700;
 }
 .contenedor {
     max-width: 120rem;
@@ -68,7 +69,7 @@ img {
     width: 100%;
 }
 .btn:hover {
-    background-color: #769c02;
+    background-color: #0f0f0f;
     cursor: pointer;
 }
 
@@ -93,14 +94,23 @@ img {
 
 /** Header y Navegacion **/
 .nombre-sitio {
-    margin-top: 5rem;
+    margin-top: 8rem;
     text-align: center;
 }
 .nombre-sitio span {
-    color: #037bc0;
+    color: #111111;
+    font-weight: bold;
 }
 .contenedor-navegacion {
     border-top: .1rem solid #e1e1e1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(221, 217, 217, 0.85); /* Leve transparencia */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    backdrop-filter: blur(2px);
 }
 .nav-principal {
     padding: 2rem 0;
