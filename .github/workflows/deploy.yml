@@ -20,12 +20,12 @@ jobs:
           echo "📦 Desplegando contenedor para la rama: ${{ github.ref_name }}"
 
           if [ "${{ github.ref_name }}" == "main" ]; then
-            docker compose build web-prod
-            docker compose up -d web-prod
+            docker-compose build web-prod
+            docker-compose up -d web-prod
           elif [ "${{ github.ref_name }}" == "qa" ]; then
-            docker compose build web-qa
-            docker compose up -d web-qa
+            docker-compose build web-qa
+            docker-compose up -d web-qa
           elif [ "${{ github.ref_name }}" == "dev" ]; then
-            docker compose build web-dev
-            docker compose up -d web-dev
+            docker-compose build web-dev
+            docker-compose up -d web-dev
           fi
