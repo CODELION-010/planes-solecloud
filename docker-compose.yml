@@ -1,10 +1,23 @@
-version: "3.8"
 services:
-  web:
+  # Servicio para producción (main)
+  web-prod:
     build: .
+    container_name: web-prod
     ports:
-      - "${PORT}:80"
-    restart: always
-    container_name: ${CONTAINER_NAME}
-    environment:
-      - PORT=${PORT}
+      - "7300:80"
+    restart: unless-stopped
+
+  # Servicio para QA
+  web-qa:
+    build: .
+    container_name: web-qa
+    ports:
+      - "7302:80"
+    restart: unless-stopped
+
+  # Servicio para desarrollo
+  web-dev:
+    build: .
+    container_name: web-dev
+    ports:
+      - "7301:80"

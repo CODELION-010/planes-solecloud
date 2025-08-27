@@ -1,42 +1,89 @@
-name: 🚀 Deploy planes-solecloud
 
+name: self-hosted Runner
 on:
   push:
     branches:
       - main
-      - dev
       - qa
-
+      - dev
 jobs:
   deploy:
     runs-on: self-hosted
-    env:
-      PORT: ${{ github.ref_name == 'main' && '7300' || github.ref_name == 'qa' && '7301' || github.ref_name == 'dev' && '7302' }}
-      CONTAINER_NAME: ${{ github.ref_name == 'main' && 'planes-solecloud-prod' || github.ref_name == 'qa' && 'planes-solecloud-qa' || github.ref_name == 'dev' && 'planes-solecloud-dev' }}
     steps:
-      # 1. Clonar el repositorio.
-      - name: 📥 Clonar repositorio
+      - name: Clonar repositorio
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           ref: ${{ github.ref_name }}
-
-      # 2. Detener y eliminar contenedor existente
-      - name: 🛑 Detener y eliminar contenedor anterior
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setear nombre del servicio
         run: |
-          docker stop ${CONTAINER_NAME} || true
-          docker rm -f ${CONTAINER_NAME} || true
-
-      # 3. Reconstruir y levantar contenedor
-      - name: 🔨 Reconstruir y levantar contenedor
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "SERVICE_NAME=web-prod" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "qa" ]; then
+            echo "SERVICE_NAME=web-qa" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "SERVICE_NAME=web-dev" >> $GITHUB_ENV
+          fi
+      
+      - name: Detener y eliminar contenedor
         run: |
-          docker-compose up -d --build
-
-      # 4. Mensaje final
-      - name: ✅ Mensaje de confirmación
-        if: success()
-        run: echo "🚀 Deploy completado con éxito en ${{ github.ref_name }} (puerto $PORT)"
-
-      - name: ❌ Mensaje de error
-        if: failure()
-        run: echo "❌ Falló el deploy en ${{ github.ref_name }}"
+          docker-compose stop $SERVICE_NAME || true
+          docker-compose rm -f $SERVICE_NAME || true
+      
+      - name: Reconstruir y levantar contenedor
+        run: |
+          docker-compose up -d --build $SERVICE_NAME
+      
+      - name: Verificar que el contenedor esté corriendo
+        run: |
+          sleep 10  # Dar tiempo para que el contenedor se inicie completamente
+          
+          # Verificar que el contenedor esté corriendo
+          if ! docker-compose ps $SERVICE_NAME | grep -q "Up"; then
+            echo "❌ El contenedor $SERVICE_NAME no está corriendo"
+            docker-compose logs $SERVICE_NAME
+            exit 1
+          fi
+          
+          echo "✅ Contenedor $SERVICE_NAME está corriendo"
+      
+      - name: Verificar salud del contenedor
+        run: |
+          # Obtener el ID del contenedor
+          CONTAINER_ID=$(docker-compose ps -q $SERVICE_NAME)
+          
+          if [ -z "$CONTAINER_ID" ]; then
+            echo "❌ No se pudo obtener el ID del contenedor"
+            exit 1
+          fi
+          
+          # Verificar que el contenedor no haya crasheado
+          CONTAINER_STATUS=$(docker inspect --format='{{.State.Status}}' $CONTAINER_ID)
+          
+          if [ "$CONTAINER_STATUS" != "running" ]; then
+            echo "❌ El contenedor está en estado: $CONTAINER_STATUS"
+            echo "📋 Logs del contenedor:"
+            docker logs $CONTAINER_ID --tail 50
+            exit 1
+          fi
+          
+          echo "✅ Contenedor en estado: $CONTAINER_STATUS"
+      
+      - name: Verificar logs por errores críticos
+        run: |
+          # Verificar los últimos logs por errores comunes
+          CONTAINER_ID=$(docker-compose ps -q $SERVICE_NAME)
+          
+          # Buscar errores críticos en los logs (últimas 20 líneas)
+          ERROR_PATTERNS="error|Error|ERROR|exception|Exception|EXCEPTION|fatal|Fatal|FATAL|crashed|Crashed|CRASHED"
+          
+          if docker logs $CONTAINER_ID --tail 20 2>&1 | grep -iE "$ERROR_PATTERNS"; then
+            echo "⚠️  Se encontraron posibles errores en los logs"
+            echo "📋 Últimos logs:"
+            docker logs $CONTAINER_ID --tail 50
+            # No hacer exit 1 aquí, ya que algunos errores pueden ser normales
+            echo "⚠️  Revisar logs manualmente para confirmar si son críticos"
+          else
+            echo "✅ No se encontraron errores críticos en los logs recientes"
+          fi
