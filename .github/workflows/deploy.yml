@@ -86,4 +86,8 @@ jobs:
             echo "⚠️  Revisar logs manualmente para confirmar si son críticos"
           else
             echo "✅ No se encontraron errores críticos en los logs recientes"
+
           fi
+
+
+
