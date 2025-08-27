@@ -1,4 +1,4 @@
-name: Deploy containers
+name: Deploy App with Docker Compose
 
 on:
   push:
@@ -6,26 +6,32 @@ on:
       - main
       - qa
       - dev
+  pull_request:
+    branches:
+      - main
+      - qa
+      - dev
 
 jobs:
   deploy:
-    runs-on: self-hosted   # 👈 importante, usas tu propio runner
-
+    runs-on: self-hosted   # 👈 recuerda, tu usas un runner local
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Levantar servicio por rama
+      - name: Build & Deploy with docker-compose
         run: |
-          echo "📦 Desplegando contenedor para la rama: ${{ github.ref_name }}"
+          echo "📦 Desplegando para rama: ${{ github.ref_name }}"
 
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            docker-compose build web-prod
-            docker-compose up -d web-prod
-          elif [ "${{ github.ref_name }}" == "qa" ]; then
-            docker-compose build web-qa
-            docker-compose up -d web-qa
-          elif [ "${{ github.ref_name }}" == "dev" ]; then
-            docker-compose build web-dev
-            docker-compose up -d web-dev
+          # limpiar contenedores huérfanos antes de levantar
+          docker-compose down --remove-orphans || true
+
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            docker-compose up -d --build web-prod
+          elif [ "${{ github.ref_name }}" = "qa" ]; then
+            docker-compose up -d --build web-qa
+          elif [ "${{ github.ref_name }}" = "dev" ]; then
+            docker-compose up -d --build web-dev
+          else
+            echo "⚠️ Rama no configurada para despliegue automático"
           fi
