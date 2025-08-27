@@ -1,10 +1,23 @@
-version: '3.8'
+version: "3.8"
+
 services:
-  planes-solecloud:
+  web-prod:
     build: .
+    container_name: web-prod
     ports:
-      - "${PORT}:80"
-    restart: always
-    container_name: planes-solecloud
-    environment:
-      - "${PORT}:80"
+      - "7300:80"
+    restart: unless-stopped
+
+  web-qa:
+    build: .
+    container_name: web-qa
+    ports:
+      - "7301:80"
+    restart: unless-stopped
+
+  web-dev:
+    build: .
+    container_name: web-dev
+    ports:
+      - "7302:80"
+    restart: unless-stopped
