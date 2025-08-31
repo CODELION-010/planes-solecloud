@@ -1,151 +1,133 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecommerce - Blog</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/app.css">
-</head>
-<body>
-    <header>
-        <h1 class="nombre-sitio">Tienda <span> Muebles </span></h1>
-    </header>
-    
-    <div class="contenedor-navegacion">
-        <nav class="nav-principal contenedor">
-            <a href="index.html">Inicio</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="tienda.html">Tienda</a>
-            <a href="blog.html">Blog</a>
-            <a href="galeria.html">Galería</a>
-            <a href="contacto.html">Contacto</a>
-        </nav>
-    </div>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>University Website Design</title>
+		<link rel="icon" type="image" href="images/th.jpeg">
+		<!-- style.css linking here -->
+		<link rel="stylesheet" href="css/style.css">
+		<!-- font family linking here -->
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+		<!-- font-awesome.min.css linking here -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+	<body>
+		<!-- header section strt -->
+		<section class="sub-header">
+			<!-- nav strt -->
+			<nav>
+				<a href="index.html"><img src="images/logo.png" alt=""></a>
+				<div class="nav-links" id="navLinks">
+					<i class="fa fa-times" onclick="hideMenu()"></i>
+					<ul>
+						<li>
+							<a href="index.html">HOME</a>
+						</li>
+						<li>
+							<a href="About.html">ABOUT</a>
+						</li>
+						<li>
+							<a href="Course.html">COURSE</a>
+						</li>
+						<li>
+							<a href="Blog.html">BLOG</a>
+						</li>
+						<li>
+							<a href="Contact.html">CONTACT</a>
+						</li>
+					</ul>
+				</div>
+				<i class="fa fa-bars" onclick="showMenu()"></i>
+			</nav>
+			<!-- nav end -->
+			<h1>Our Certificate & Online Programs For 2022</h1>
+		</section>
+		<!-- header section end -->
 
-    
-    <main class="contenido-principal contenedor ">
-        <h2 class="text-center">Nuestro Blog</h2>
-        
-        <section class="contenedor-blog">
-            <div class="blog">
-                <article class="entrada">
-                    <h2>Guía de Colores</h2>
+		<!-- blog page content -->
+		<section class="blog-content">
+			<div class="row">
+				<div class="blog-left">
+					<img src="images/certificate.jpg" alt="">
+					<h2>Our Certificate & Online Programs For 2022</h2>
+					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero sunt dignissimos adipisci? Enim, assumenda consectetur corrupti illo temporibus, nisi expedita, quod sit, delectus officia natus aliquid minus numquam</p>
+					<br>
+					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus corrupti quibusdam, fugiat maxime, veritatis, qui nobis at perspiciatis debitis nemo numquam sit ad aut, vel ratione ipsum labore quos similique. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore quas doloremque cum, temporibus delectus, adipisci ut praesentium alias! Nulla asperiores sequi aut assumenda numquam nostrum, repellendus, a vero officia odio.</p>
+					<br>
+					<p>Lorem ipsum dolor, sit amet consectetur adipisicing, elit. Reiciendis obcaecati error commodi nulla ex officia amet rerum, cum velit nam a id magnam voluptatum sequi minus excepturi, nisi perspiciatis dicta. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis quibusdam soluta error. Deleniti in voluptas dolore quae minus facere, veritatis laboriosam dolorem molestias! Laudantium deleniti illum, itaque asperiores repellat hic.</p>
+					<br>
+					<p>Lorem ipsum dolor, sit, amet consectetur adipisicing elit. Architecto illum minus sed assumenda, itaque fugiat ad. Facilis alias voluptates, fugit adipisci veritatis atque, laborum ex. Quidem dicta ab dignissimos dolore! Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Voluptatem.</p>
 
-                    <div class="imagen">
-                        <img src="img/nosotros.jpg" alt="imagen blog">
-                    </div>
+					<div class="comment-box">
+						<h3>Leave a comment</h3>
+						<form class="comment-form">
+							<input type="text" placeholder="Enter Name">
+							<input type="Email" placeholder="Enter Email">
+							<textarea rows="5" placeholder="Your Comment"></textarea>
+							<button type="Submit" class="hero-btn red-btn">POST COMMENT</button>
+						</form>
+					</div>
+				</div>
+				<div class="blog-right">
+					<h3>Post Categories</h3>
+					<div>
+						<span>Business Analytics</span>
+						<span>21</span>
+					</div>
+					<div>
+						<span>Data Science</span>
+						<span>29</span>
+					</div>
+					<div>
+						<span>Machine Learning</span>
+						<span>18</span>
+					</div>
+					<div>
+						<span>Computer Science</span>
+						<span>37</span>
+					</div>
+					<div>
+						<span>AutoCAD</span>
+						<span>45</span>
+					</div>
+					<div>
+						<span>Journalism</span>
+						<span>42</span>
+					</div>
+					<div>
+						<span>Commerce</span>
+						<span>23</span>
+					</div>
+				</div>
+			</div>
+		</section>
 
-                    <div class="contenido-blog">
-                        <div class="entrada-meta">
-                            <p>Fecha: <span>22 de Octubre de 2022</span> </p>
-                            <p>Escrito por: <span>TiendaMuebles</span> </p>
-                        </div>
-
-                        <div class="entrada-blog">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id numquam ducimus alias commodi eveniet, impedit amet! Quidem et tempore obcaecati vitae voluptatibus ipsam? Quae repudiandae sequi quas numquam nam.</p>
-
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati provident beatae fugiat laudantium possimus harum, magnam architecto soluta doloribus itaque dolores amet maiores pariatur ea quisquam voluptatem numquam? In, nobis!</p>
-                        </div>
-                        <a href="entrada.html" class="btn max-width-30">Leer</a>
-                    
-                    </div>
-
-                  
-                </article>
-
-                <article class="entrada">
-                    <h2>Guía de Colores</h2>
-
-                    <div class="imagen">
-                        <img src="img/nosotros.jpg" alt="imagen blog">
-                    </div>
-
-                    <div class="contenido-blog">
-                        <div class="entrada-meta">
-                            <p>Fecha: <span>22 de Octubre de 2022</span> </p>
-                            <p>Escrito por: <span>TiendaMuebles</span> </p>
-                        </div>
-
-                        <div class="entrada-blog">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id numquam ducimus alias commodi eveniet, impedit amet! Quidem et tempore obcaecati vitae voluptatibus ipsam? Quae repudiandae sequi quas numquam nam.</p>
-
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati provident beatae fugiat laudantium possimus harum, magnam architecto soluta doloribus itaque dolores amet maiores pariatur ea quisquam voluptatem numquam? In, nobis!</p>
-                        </div>
-
-                        <a href="entrada.html" class="btn max-width-30">Leer</a>
-                    </div>
-
-                    
-                    
-                </article>
-            </div>
-
-            <aside>
-                <h3>Otras Entradas de Blog</h3>
-                <ul>
-                    <li>
-                        <a href="entrada.html">Guía de Colores</a>
-                    </li>
-                    <li>
-                        <a href="entrada.html">Nuevos Modelos</a>
-                    </li>
-                    <li>
-                        <a href="entrada.html">Guía para diseño de interiores</a>
-                    </li>
-                    <li>
-                        <a href="entrada.html">Guía para diseño de exteriores</a>
-                    </li>
-                </ul>
-            </aside>
-        </section>
-    </main>
-
-
-
-
-    <footer class="site-footer">
-        <div class="grid-footer contenedor">
-            <div>
-                <h3>Categorías</h3>
-
-                <nav class="footer-menu">
-                    <a href="#">Cocina</a>
-                    <a href="#">Oficina</a>
-                    <a href="#">Jardín</a>
-                    <a href="#">Cochera</a>
-                    <a href="#">Dormitorios</a>
-                </nav>
-            </div>
-
-            <div>
-                <h3>Sobre Nosotros</h3>
-                <nav class="footer-menu">
-                    <a href="#">Nuestra Historia</a>
-                    <a href="#">Misión, Visión y Valores</a>
-                    <a href="#">Carreras</a>
-                    <a href="#">Política de Privacidad</a>
-                    <a href="#">Términos del Servicio</a>
-                </nav>
-            </div>
-
-            <div>
-                <h3>Soporte</h3>
-                <nav class="footer-menu">
-                    <a href="#">Preguntas Frecuentes</a>
-                    <a href="#">Ayuda en línea</a>
-                    <a href="#">Confianza y Seguridad</a>
-                </nav>
-            </div>
-
-        </div>
-
-        <p class="copyright">Todos los derechos Reservados, TiendaMuebles</p>
-    </footer>
-
-</body>
+	
+		
+		
+		<!-- footer strt -->
+		<section class="footer">
+			<h4>About Us</h4>
+			<p>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Ut reprehenderit labore eligendi tenetur, sapiente ab doloremque id provident dignissimos <br> ipsa perspiciatis voluptates sunt facilis minus omnis illo ea maxime nesciunt.</p>
+			<div class="icons">
+				<i class="fa fa-facebook"></i>
+				<i class="fa fa-twitter"></i>
+				<i class="fa fa-instagram"></i>
+				<i class="fa fa-linkedin"></i>
+			</div>
+			<p>Made With <i class="fa fa-heart"></i> by Sayeeda Saima with help of <i class="fa fa-heart"></i> Easy Tutorials  </p>
+		</section>
+		<!-- footer end -->
+		<!-- Javascript for toggle menu -->
+		<script>
+			var navLinks = document.getElementById("navLinks");
+			function showMenu(){
+				navLinks.style.right = "0";
+			}
+			function hideMenu(){
+				navLinks.style.right = "-200px";
+			}
+		</script>
+	</body>
 </html>
