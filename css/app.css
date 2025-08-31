@@ -93,6 +93,7 @@ img {
 
 
 /** Header y Navegacion **/
+/** Header y Navegacion **/
 .nombre-sitio {
     margin-top: 8rem;
     text-align: center;
@@ -101,6 +102,9 @@ img {
     color: #111111;
     font-weight: bold;
 }
+/* --------------------------------------------------------------------
+* - REFFACTORIZAR MENU RESPONSIVE
+* -------------------------------------------------------------------- */
 .contenedor-navegacion {
     border-top: .1rem solid #e1e1e1;
     position: fixed;
@@ -108,24 +112,104 @@ img {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(221, 217, 217, 0.85); /* Leve transparencia */
+    background: rgba(24, 122, 220, 0.85); /* Leve transparencia */
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     backdrop-filter: blur(2px);
 }
+
+/* Menú principal */
 .nav-principal {
-    padding: 2rem 0;
+    padding: 1rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+    max-height: 0; /* Oculto por defecto en móvil */
+    opacity: 0;
 }
 
-@media (min-width: 768px) { 
-    .nav-principal {
-        justify-content: space-between;
-        flex-direction: row;
+.nav-principal.show {
+    max-height: 500px; /* Altura suficiente para mostrar enlaces */
+    opacity: 1;
+}
+
+/* Enlaces */
+.nav-principal a {
+    display: block;
+    padding: 0.8rem 0;
+    text-decoration: none;
+    color: #111111;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    transition: color 0.3s ease;
+    text-align: end;
+    &:hover {
+        color: #f7f9fa;
+        border-bottom: #f7f9fa solid 2px;
     }
 }
 
+/* Botón hamburguesa */
+.menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 4rem;
+    cursor: pointer;
+    padding: 1rem;
+    color: #111111;
+}
+@media (max-width: 768px) {
+  .nav-principal {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-principal a {
+    display: none;
+    margin: 10px 0px 0px  5px;
+    
+  }
+
+  .nav-principal.show a {
+    display: block;
+  }
+
+  .menu-toggle {
+    display: block;
+    align-self: flex-start;
+  }
+}
+
+
+/* Escritorio */
+@media (min-width: 768px) {
+    .menu-toggle {
+        display: none;
+    }
+
+    .nav-principal {
+        flex-direction: row;
+       justify-content: flex-end;
+        align-items: center;
+        max-height: none;
+        opacity: 1;
+    }
+
+    .nav-principal a {
+        margin: 0 1.5rem;
+        padding: 0;
+    }
+}
+/* --------------------------------------------------------------------
+* - FIN MENU
+*-------------------------------------------------------------------- */
+ 
+
+
+/* Hero */
 .hero {
     background-image: url(../img/principal.jpg);
     background-repeat: no-repeat;
@@ -134,7 +218,7 @@ img {
     height: 25rem;
 }
 
-@media (min-width: 768px) { 
+@media (min-width: 768px) {
     .hero {
         height: 55rem;
     }
