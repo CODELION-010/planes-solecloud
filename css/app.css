@@ -106,7 +106,7 @@ img {
 * - REFFACTORIZAR MENU RESPONSIVE
 * -------------------------------------------------------------------- */
 .contenedor-navegacion {
-  padding: 1rem 4rem;
+  padding: 1rem 0;
   position: fixed;
   top: 0;
   left: 0;
@@ -169,6 +169,7 @@ img {
   .nav-principal {
     flex-direction: column;
     align-items: flex-start;
+    padding: 0;
   }
 
   .nav-principal a {
